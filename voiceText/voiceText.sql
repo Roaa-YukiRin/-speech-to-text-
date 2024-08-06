@@ -1,0 +1,8 @@
+CREATE DATABASE IF NOT EXISTS `voiceText`;
+
+USE `voiceText`;
+
+CREATE TABLE IF NOT EXISTS `Save_text` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `text` TEXT NOT NULL
+);
