@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>voice Text</title>
+    <script type="text/javascript" src="autoUpdate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<style>
+    
+        body {
+			    font-family: arial;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+			}
+    .start-image {
+        background-image: url('voice.png');
+        background-size: cover;
+        background-position: center;
+        color: rgb(2, 83, 13);
+        font-size: 20px;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* تحويل الزر إلى دائرة */
+       width: 50px; /* تعيين عرض الزر */
+       height: 50px; /* تعيين ارتفاع الزر */
+      }
+      .End-image {
+        background-image: url('microphone.png');
+        background-size:cover;
+        background-position: center;
+        color:rgb(255, 255, 255);
+        font-size: 20px;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* تحويل الزر إلى دائرة */
+        width: 50px; /* تعيين عرض الزر */
+        height: 50px; /* تعيين ارتفاع الزر */
+      }
+      .save-btn {
+        padding:10px;
+		 background-color:#f3bf4f;
+		color: #FFFFFF;
+		border: 0px;
+		cursor:pointer;
+		 border-radius: 5px;
+		font-size: 20px;
+      
+      }
+      .hide{
+        width: 100%;
+        height: 150px;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        resize: none;
+      }
+    .centerh{
+        display: flex;
+                justify-content: center;
+                align-items: center;
+                
+    }
+      </style>
+
+</head>
+<body>
+    <div>
+        <h1 class="centerh">
+            voice spech to text in js
+        </h1>
+        <div align="center">
+            <button id="start" class="start-image">P</button>
+            <button id="stop" class="End-image">S</button>
+            <button class="save-btn" id="save-btn">Save to Database</button>
+        <p><span id="action"></span></p>
+        <textarea id="result" class="hide" rows="8" cols="80"></textarea>
+        </div>
+    </div>
+    <script>
+         var startButton = document.getElementById("start");
+        var stopButton = document.getElementById("stop");
+        var saveButtom = document.getElementById("save-btn");
+        var action = document.getElementById("action");
+        var resultElement = document.getElementById("result");
+        var recognition = new webkitSpeechRecognition();
+        recognition.lang = window.navigator.language;
+        recognition.interimResult = true;
+        var isRecording = false;
+        var timeoutId;
+
+        startButton.addEventListener('click', () => {
+        if (!isRecording) {
+            recognition.start();
+            action.textContent = "Recording...";
+            isRecording = true;
+            startTimeoutTimer();
+        }
+        });
+
+        stopButton.addEventListener('click', () => {
+        if (isRecording) {
+            recognition.stop();
+            action.textContent = "Stopped";
+            isRecording = false;
+            clearTimeout(timeoutId);
+        }
+        });
+
+        recognition.addEventListener('result', (event) => {
+        const result = event.results[event.results.length - 1][0].transcript;
+        resultElement.value = result;
+        });
+
+        function startTimeoutTimer() {
+        timeoutId = setTimeout(() => {
+            console.log("Automatic stop due to 15 minutes of inactivity");
+            recognition.stop();
+            action.textContent = "Stopped";
+            isRecording = false;
+        }, 15 * 60 * 1000); // 15 minutes in milliseconds
+        }
+    </script>
+</body>
+</html>
